@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: auth
+  template:
+    metadata:
+      labels:
+        app: auth
+    spec:
+      imagePullSecrets:
+      - name: aliyun-registry-key
+      containers:
+      - name: auth
+        image: registry.cn-hangzhou.aliyuncs.com/leansd/auth:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8848
+        env:
+        - name: KEYCLOAK_BASE_URL
+          value: 'http://keycloak:8089'  
+        - name: KEYCLOAK_REALM_NAME
+          value: 'leansd'
+        - name: APP_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: cotrip-kv-secret
+              key: APP_SECRET
+        - name: APP_ID
+          valueFrom:
+            secretKeyRef:
+              name: cotrip-kv-secret
+              key: APP_ID
+        - name: PORT
+          value: '8848'          
+        - name: KEYCLOAK_ADMIN_CLIENT_ID
+          value: 'admin-cli'
+        - name: KEYCLOAK_ADMIN_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: cotrip-kv-secret
+              key: KEYCLOAK_ADMIN_USERNAME
+        - name: KEYCLOAK_ADMIN_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: cotrip-kv-secret
+              key: KEYCLOAK_ADMIN_PASSWORD
+        - name: KEYCLOAK_AUTH_CLIENT_ID
+          value: 'cotrip'                              
+
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: auth
+spec:
+  selector:
+    app: auth
+  ports:
+    - protocol: TCP
+      port: 8848
+      targetPort: 8848
