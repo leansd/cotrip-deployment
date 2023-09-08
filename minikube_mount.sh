@@ -1,0 +1,1 @@
+minikube mount /Users/gangz/data:/home/docker/data

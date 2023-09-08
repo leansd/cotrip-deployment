@@ -15,6 +15,7 @@ spec:
       containers:
       - name: cotrip
         image: registry.cn-hangzhou.aliyuncs.com/leansd/cotrip:latest
+        imagePullPolicy: Always
         ports:
         - containerPort: 8080
         env:

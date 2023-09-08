@@ -11,7 +11,7 @@ spec:
   accessModes:
     - ReadWriteOnce
   hostPath:
-    path: "/Users/gangz/data/keycloak"
+    path: "/home/docker/data/keycloak"
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -40,17 +40,34 @@ spec:
       labels:
         app: keycloak
     spec:
+      initContainers:   # 更改文件夹权限
+      - name: volume-permission
+        image: busybox
+        command: ["sh", "-c", "chown -R 1000:1000 /opt/keycloak/data"]
+        volumeMounts:
+        - name: keycloak-data
+          mountPath: /opt/keycloak/data     
       containers:
       - name: keycloak
         image: quay.io/keycloak/keycloak:22.0.1
-        args: ["start-dev"]
+        args: ["start-dev","--import-realm"]
         ports:
         - containerPort: 8080
         env:
           - name: KEYCLOAK_ADMIN
-            value: "admin"
+            valueFrom:
+              secretKeyRef:
+                name: cotrip-kv-secret
+                key: KEYCLOAK_ADMIN_USERNAME
           - name: KEYCLOAK_ADMIN_PASSWORD
-            value: "admin"
+            valueFrom:
+              secretKeyRef:
+                name: cotrip-kv-secret
+                key: KEYCLOAK_ADMIN_PASSWORD
+          - name: KEYCLOAK_IMPORT
+            value: "/config/keycloak-config.json"
+          - name: KC_STRICT_HOSTNAME
+            value: "false"
           - name: KC_PROXY
             value: "edge"
         ports:
@@ -64,11 +81,11 @@ spec:
         - name: keycloak-config
           mountPath: "/config"
           readOnly: true
+        - name: keycloak-config
+          mountPath: "/opt/keycloak/data/import"
+          readOnly: true
       volumes:
       - name: keycloak-data
-        persistentVolumeClaim:
-          claimName: keycloak-pvc
-      - name: keycloak-log
         persistentVolumeClaim:
           claimName: keycloak-pvc
       - name: keycloak-config
