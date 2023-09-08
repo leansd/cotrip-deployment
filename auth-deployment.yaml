@@ -17,7 +17,6 @@ spec:
       containers:
       - name: auth
         image: registry.cn-hangzhou.aliyuncs.com/leansd/auth:latest
-        imagePullPolicy: Always
         ports:
         - containerPort: 8848
         env:
@@ -49,6 +48,11 @@ spec:
             secretKeyRef:
               name: cotrip-kv-secret
               key: KEYCLOAK_ADMIN_PASSWORD
+        - name: KEYCLOAK_NEW_USER_DEFAULT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: cotrip-kv-secret
+              key: KEYCLOAK_NEW_USER_DEFAULT_PASSWORD        
         - name: KEYCLOAK_AUTH_CLIENT_ID
           value: 'cotrip'                              
 
