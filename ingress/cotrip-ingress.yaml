@@ -4,8 +4,13 @@ metadata:
   name: cotrip-ingress
 spec:
   ingressClassName: nginx
+  tls:
+  - hosts:
+    - api.leansd.cn
+    secretName: leansd-tls
   rules:
-  - http:
+  - host: api.leansd.cn
+    http:
       paths:
       - path: /live-check
         pathType: Prefix
