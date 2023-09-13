@@ -12,6 +12,13 @@ spec:
       labels:
         app: keycloak
     spec:
+      initContainers:   # 更改文件夹权限
+      - name: volume-permission
+        image: busybox
+        command: ["sh", "-c", "chown -R 1000:1000 /opt/keycloak/data"]
+        volumeMounts:
+        - name: keycloak-data
+          mountPath: /opt/keycloak/data     
       containers:
       - name: keycloak
         image: quay.io/keycloak/keycloak:22.0.1
