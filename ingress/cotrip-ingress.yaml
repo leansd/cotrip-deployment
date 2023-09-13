@@ -19,6 +19,13 @@ spec:
             name: cotrip
             port:
               number: 8080
+      - path: /notification
+        pathType: Prefix
+        backend:
+          service:
+            name: cotrip
+            port:
+              number: 8080
       - path: /cotrip
         pathType: Prefix
         backend:
