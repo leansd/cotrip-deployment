@@ -18,8 +18,8 @@ spec:
       url: "oss-cn-beijing.aliyuncs.com"
       otherOpts: "-o max_stat_cache_size=0 -o allow_other"
       path: "/"
-      akId: "LTAI5tF5qxkWSSPHps2vc57X"
-      akSecret: "U8Bt3NCqHkUuOfIYXahzBbDUNEiGQw"
+      akId: ""
+      akSecret: ""
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
