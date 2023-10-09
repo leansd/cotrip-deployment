@@ -13,5 +13,5 @@ commonAnnotations:
 namespace: leansd
 resources:
 - config/
-- keycloak.yaml
-
+- keycloak.yml
+- cotrip.yml

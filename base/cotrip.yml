@@ -1,0 +1,39 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: cotrip
+spec:
+  selector:
+    app: cotrip
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cotrip
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cotrip
+  template:
+    metadata:
+      labels:
+        app: cotrip
+    spec:
+      containers:
+      - name: cotrip
+        image: docker.io/leansd/cotrip:latest
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 8080
+        env:
+        - name: spring.profiles.active
+          value: dev
+        - name: server.port
+          value: '8080'
+      #imagePullSecrets:
+      #- name: aliyun-registry-key
