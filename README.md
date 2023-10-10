@@ -16,6 +16,12 @@
 
 ## 在Kubernetes环境中安装
 
+### 前提条件
+
+1. 有一个kubernetes 环境 （Docker Desktop、MiniKube、MicroK8s均能帮助搭建K8s学习环境）
+2. 开启DNS（CoreDNS，Docker Desktop会给开）
+3. 有ingress-nginx （Docker Desktop要装一下）
+
 ### 马上看效果
 
 提示1： 我们使用leansd做为kubernetes的namespace
@@ -35,9 +41,9 @@
 
 key
 
-## 检查启动正常
+### 检查启动正常
 
-### Keycloak能够登录，并看到leansd的realm
+#### Keycloak能够登录，并看到leansd的realm
 
 1. 将pod端口转出来
 
@@ -49,17 +55,28 @@ key
 
 4. 关闭窗口； ctrl-c 关闭端口转发
 
-### Cotrip能curl到live-api接口
+#### Cotrip能curl到live-api接口
 
 1. Pod端口转出来
 
     kubectl port-forward -n leansd services/cotrip 8080
 
+2. 有一个api可以get
+    
+    curl -v localhost:8080/live-check     
+    #[{"id":"Alice",...},{"id":"Bob",...}]  
+
+#### Auth能curl到public-info接口
+
+1. Pod端口转出来
+
+    kubectl port-forward -n leansd services/auth 8848 
+
+2. curl api
+
+    curl -v localhost:8848/auth/v1/public-info 
+    #{"status":"success"}%             
+
 ### 补充说明
 
-base目录是最基础，以调试模式启动的环境
-
-    https://www.keycloak.org/server/containers#_trying_keycloak_in_development_mode
-
-base 原则，在最小的依赖需求情况下，能够启动，并且看到接口的数据，仅能够用于调试。
-    
+Keycloak文档：https://www.keycloak.org/server/containers#_trying_keycloak_in_development_mode

@@ -1,0 +1,4 @@
+#set image pull to Always
+- op: replace
+  path: /spec/template/spec/containers/0/imagePullPolicy
+  value: Always
