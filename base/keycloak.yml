@@ -46,6 +46,11 @@ spec:
               secretKeyRef:
                 name: cotrip-kv-secret
                 key: KEYCLOAK_ADMIN_PASSWORD
+          - name: KEYCLOAK_NEW_USER_DEFAULT_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: cotrip-kv-secret
+                key: KEYCLOAK_NEW_USER_DEFAULT_PASSWORD
         volumeMounts:
         - name: realm-init
           mountPath: "/opt/keycloak/data/import"
