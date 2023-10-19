@@ -1,22 +1,24 @@
-# 如何安装
+# 共享出行部署示例
 
-文本介绍如何启动服务器环境、微信小程序环境，预览效果。
+本文介绍如何启动服务器环境、微信小程序环境，预览效果。
+
+# 如何安装
 
 你有3个选择：
 
-Opt1. 使用Docker或PodMan作为运行环境 （会安装Docker Desktop以及 container的运行，难度中等）
+选项1: 直接在本地运行环境运行，这意味着你需要在自己的服务器上安装Java SDK， Node.js, Keycloak等。
 
-Opt2. 直接在本地按照程序的运行环境启动 （要熟悉Java SDK、Node、Keycloak的安装和配置，难度中等）
+选项2: 使用Docker或PodMan作为运行环境。 你需要有Docker环境，总体来说要求不高
 
-Opt3. 使用Kubernetes作为运行环境 （会K8s演示环境的搭建与排障，难度高等）
+选项3: 使用Kubernetes作为运行环境。这个是默认的部署方法，不过依赖于你有可用的Kubernetes或自行搭建好的Kuberntes。
 
+下面介绍选项2和选项3的部署方法
 
+## 选项2
 
-## 快速看效果(Opt1)
+需求：
 
-技能需求：
-
-1. 会使用docker环境，Docker Desktop或者PodMan
+1. 有docker环境，Docker Desktop或者PodMan
 2. 有微信小程序开发工具
 
 启动顺序：
@@ -135,7 +137,7 @@ docker run -it --rm --name auth \
 <img src="doc/app-2.jpg" alt="alt text" width="200">
 
    
-## 在Kubernetes环境中安装（Opt.3)
+## 在Kubernetes环境中安装（选项3)
 
 ### 前提条件
 
