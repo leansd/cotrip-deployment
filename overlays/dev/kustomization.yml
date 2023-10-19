@@ -1,0 +1,30 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ../../base/
+
+images: #参考：https://kubectl.docs.kubernetes.io/references/kustomize/kustomization/images/
+- name: docker.io/leansd/cotrip
+  newName: registry.cn-hangzhou.aliyuncs.com/leansd/cotrip
+- name: docker.io/leansd/auth
+  newName: registry.cn-hangzhou.aliyuncs.com/leansd/auth
+
+patches:
+  - patch: |-
+      - op: replace
+        path: /spec/template/spec/containers/0/imagePullPolicy
+        value: Always
+    target:
+      group: apps
+      kind: Deployment
+      name: auth
+  - patch: |-
+      - op: replace
+        path: /spec/template/spec/containers/0/imagePullPolicy
+        value: Always
+    target:
+      group: apps
+      kind: Deployment
+      name: cotrip
+#k8s的标签建议：https://kubernetes.io/zh-cn/docs/concepts/overview/working-with-objects/common-labels/#labels      

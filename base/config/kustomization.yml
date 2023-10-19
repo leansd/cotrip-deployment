@@ -1,0 +1,17 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+metadata:
+  name: create-secret-and-all-config-data
+secretGenerator:
+- name: cotrip-kv-secret
+  literals:
+  - KEYCLOAK_ADMIN_USERNAME=admin  # keycloak的管理员账号
+  - KEYCLOAK_ADMIN_PASSWORD=admin
+  - KEYCLOAK_NEW_USER_DEFAULT_PASSWORD=123456
+  - APP_SECRET=TODO  #微信小程序的secret
+  - APP_ID=TODO
+  type: Opaque
+- name: keycloak-config
+  files:
+  - leansd-realm.json
+  type: Opaque

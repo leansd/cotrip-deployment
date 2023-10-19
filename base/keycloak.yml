@@ -1,0 +1,63 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: keycloak
+spec:
+  selector:
+    app: keycloak
+  ports:
+    - protocol: TCP
+      port: 8089
+      targetPort: 8080
+---      
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: keycloak
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: keycloak
+  template:
+    metadata:
+      labels:
+        app: keycloak
+    spec:
+      containers:
+      - name: keycloak
+        image: quay.io/keycloak/keycloak:22.0.1
+        args: ["start-dev","--import-realm"]
+        ports:
+        - containerPort: 8080
+        env:
+          - name: KC_STRICT_HOSTNAME
+            value: "false"
+          - name: KC_PROXY
+            value: "edge"
+          - name: KEYCLOAK_ADMIN
+            valueFrom:
+              secretKeyRef:
+                name: cotrip-kv-secret
+                key: KEYCLOAK_ADMIN_USERNAME
+          - name: KEYCLOAK_ADMIN_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: cotrip-kv-secret
+                key: KEYCLOAK_ADMIN_PASSWORD
+          - name: KEYCLOAK_NEW_USER_DEFAULT_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: cotrip-kv-secret
+                key: KEYCLOAK_NEW_USER_DEFAULT_PASSWORD
+        volumeMounts:
+        - name: realm-init
+          mountPath: "/opt/keycloak/data/import"
+          readOnly: true
+      volumes:
+      - name: realm-init
+        secret:
+          secretName: keycloak-config     
+         
+
