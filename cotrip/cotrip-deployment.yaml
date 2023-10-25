@@ -20,8 +20,12 @@ spec:
         - containerPort: 8080
         env:
         - name: spring.profiles.active
-          value: dev
+          value: default
         - name: server.port
           value: '8080'
+        - name: spring.security.oauth2.resourceserver.jwt.issuer-uri
+          value: 'http://keycloak:8089/realms/leansd'
+        - name: spring.security.oauth2.resourceserver.jwt.jwk-set-uri
+          value: 'http://keycloak:8089/realms/leansd/protocol/openid-connect/certs'
       imagePullSecrets:
       - name: aliyun-registry-key
