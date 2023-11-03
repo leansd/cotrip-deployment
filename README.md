@@ -1,8 +1,13 @@
-# 共享出行部署示例
+# 共享出行部署
 
-本文介绍如何启动服务器环境、微信小程序环境，预览效果。
+## 总体信息
 
-# 如何安装
+本文介绍了如何启动服务器环境、微信小程序环境，预览效果。
+
+关于项目的总体情况、许可证和贡献信息等，请参阅[Overall项目的Readme文件说明](https://gitee.com/leansd/overall/blob/main/README.md)
+
+
+## 如何安装
 
 你有3个选择：
 
@@ -14,7 +19,7 @@
 
 下面介绍选项2和选项3的部署方法
 
-## 选项2
+### 选项2
 
 需求：
 
@@ -28,7 +33,7 @@
 - auth
 - 微信小程序
 
-### 启动keycloak
+#### 启动keycloak
 
 在这个目录中执行。
 
@@ -49,7 +54,7 @@ docker run -d --name keycloak \
 2. 浏览器打开 localhost:8089；点击"Administration Console ";能够使用admin/admin登录keycloak
 3. 登录以后能够在左侧上方的下拉框中切换到leansd（默认选择的是admin）
 
-### 启动cotrip
+#### 启动cotrip
 
 请先clone cotrip工程，进入到工程根目录执行
 
@@ -78,7 +83,7 @@ docker run -it -d --rm --name cotrip \
 1. 能在log中看到："Started CotripApplication in ***"
 2. `curl localhost:8081/live-check` 能够看到json数组
 
-### 启动Auth
+#### 启动Auth
 
 请先clone auth工程，进入到工程根目录执行
 
@@ -116,7 +121,7 @@ docker run -it --rm --name auth \
 1. 能在log中看到："Server started on http://localhost:8848"
 2. `curl -v localhost:8848/auth/v1/public-info` 能看到 {"status":"success"}
 
-### 启动微信小程序
+#### 启动微信小程序
 
 在启动微信小程序之前，需要先在微信开发者工具中导入项目。请参考微信小程序的文档。
 
@@ -137,9 +142,9 @@ docker run -it --rm --name auth \
 <img src="doc/app-2.jpg" alt="alt text" width="200">
 
    
-## 在Kubernetes环境中安装（选项3)
+### 在Kubernetes环境中安装（选项3)
 
-### 前提条件
+#### 前提条件
 
 1. 有一个kubernetes 环境 （Docker Desktop、MiniKube、MicroK8s均能帮助搭建K8s学习环境）
 2. 开启DNS（Docker Desktop里开启kubernetes后就有）
@@ -147,7 +152,7 @@ docker run -it --rm --name auth \
 
 安装ingress：https://kubernetes.github.io/ingress-nginx/deploy/#docker-desktop
 
-### 启动服务器端
+#### 启动服务器端
 
 提示1： 我们使用leansd做为kubernetes的namespace
 
@@ -166,9 +171,9 @@ docker run -it --rm --name auth \
 
 key
 
-### 检查启动正常
+#### 检查启动正常
 
-#### Keycloak能够登录，并看到leansd的realm
+##### Keycloak能够登录，并看到leansd的realm
 
 1. 将pod端口转出来
 
@@ -180,7 +185,7 @@ key
 
 4. 关闭窗口； ctrl-c 关闭端口转发
 
-#### Cotrip能curl到live-api接口
+##### Cotrip能curl到live-api接口
 
 1. Pod端口转出来
 
@@ -191,7 +196,7 @@ key
     curl -v localhost:8080/live-check     
     #[{"id":"Alice",...},{"id":"Bob",...}]  
 
-#### Auth能curl到public-info接口
+##### Auth能curl到public-info接口
 
 1. Pod端口转出来
 
@@ -202,7 +207,7 @@ key
     curl -v localhost:8848/auth/v1/public-info 
     #{"status":"success"}%             
 
-### 启动用户界面
+#### 启动用户界面
 
 1. 下载微信小程序开发工具（可能还需要一个开发者账号）
 2. 打开小程序开发工具
@@ -212,7 +217,7 @@ key
 
 <img src="doc/app-land.jpg" alt="alt text" width="200">
 
-### 启动后稍等一会儿
+#### 启动后稍等一会儿
 
 注意：后面的效果需要将小程序源代码中开发环境的地址改成api.leansd.cn
 
@@ -232,7 +237,7 @@ key
 $ curl --resolve "api.leansd.cn:80:127.0.0.1" -i http://api.leansd.cn/live-check 
 [{"id":"Alice","createdBy":null,"createdAt":0,"name":null},{"id":"Bob","createdBy":null,"createdAt":0,"name":null}]
 ```
-### 补充说明
+#### 补充说明
 
 Keycloak文档：https://www.keycloak.org/server/containers#_trying_keycloak_in_development_mode
 给Docker Desktop安装ingress https://www.michaelrose.dev/posts/k8s-ingress-docker-desktop/
